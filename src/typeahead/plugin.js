@@ -27,7 +27,7 @@
       datasets = _.isArray(datasets) ? datasets : [].slice.call(arguments, 1);
 
       o = o || {};
-      www = WWW(o.classNames);
+      www = WWW(o.classNames. o.menuConfig);
 
       return this.each(attach);
 

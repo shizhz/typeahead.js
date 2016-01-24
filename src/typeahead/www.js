@@ -23,13 +23,13 @@ var WWW = (function() {
 
   return build;
 
-  function build(o) {
+  function build(o, menuConfig) {
     var www, classes;
 
     classes = _.mixin({}, defaultClassNames, o);
 
     www = {
-      css: buildCss(),
+      css: buildCss(menuConfig),
       classes: classes,
       html: buildHtml(classes),
       selectors: buildSelectors(classes)
@@ -58,7 +58,7 @@ var WWW = (function() {
     return selectors;
   }
 
-  function buildCss() {
+  function buildCss(menuConfig) {
     var css =  {
       wrapper: {
         position: 'relative',
@@ -82,13 +82,6 @@ var WWW = (function() {
         position: 'relative',
         verticalAlign: 'top'
       },
-      menu: {
-        position: 'absolute',
-        top: '100%',
-        left: '0',
-        zIndex: '100',
-        display: 'none'
-      },
       ltr: {
         left: '0',
         right: 'auto'
@@ -98,6 +91,22 @@ var WWW = (function() {
         right:' 0'
       }
     };
+      var menuPosition = menuConfig.position ? menuConfig.position : 'bottom';
+
+    var menuCss =  {
+          position: 'absolute',
+          left: '0',
+          zIndex: '100',
+          display: 'none'
+      };
+
+      if (menuPosition == 'top') {
+          menuCss['bottom'] = '100%';
+      } else {
+          menuCss['top'] = '100%';
+      }
+
+      css['menu'] = menuCss;
 
     // ie specific styling
     if (_.isMsie()) {

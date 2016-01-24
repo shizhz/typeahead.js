@@ -1,7 +1,7 @@
 /*!
  * typeahead.js 0.11.1
  * https://github.com/twitter/typeahead.js
- * Copyright 2013-2015 Twitter, Inc. and other contributors; Licensed MIT
+ * Copyright 2013-2016 Twitter, Inc. and other contributors; Licensed MIT
  */
 
 (function(root, factory) {
@@ -167,11 +167,11 @@
             highlight: "tt-highlight"
         };
         return build;
-        function build(o) {
+        function build(o, menuConfig) {
             var www, classes;
             classes = _.mixin({}, defaultClassNames, o);
             www = {
-                css: buildCss(),
+                css: buildCss(menuConfig),
                 classes: classes,
                 html: buildHtml(classes),
                 selectors: buildSelectors(classes)
@@ -199,7 +199,7 @@
             });
             return selectors;
         }
-        function buildCss() {
+        function buildCss(menuConfig) {
             var css = {
                 wrapper: {
                     position: "relative",
@@ -222,13 +222,6 @@
                     position: "relative",
                     verticalAlign: "top"
                 },
-                menu: {
-                    position: "absolute",
-                    top: "100%",
-                    left: "0",
-                    zIndex: "100",
-                    display: "none"
-                },
                 ltr: {
                     left: "0",
                     right: "auto"
@@ -238,6 +231,19 @@
                     right: " 0"
                 }
             };
+            var menuPosition = menuConfig.position ? menuConfig.position : "bottom";
+            var menuCss = {
+                position: "absolute",
+                left: "0",
+                zIndex: "100",
+                display: "none"
+            };
+            if (menuPosition == "top") {
+                menuCss["bottom"] = "100%";
+            } else {
+                menuCss["top"] = "100%";
+            }
+            css["menu"] = menuCss;
             if (_.isMsie()) {
                 _.mixin(css.input, {
                     backgroundImage: "url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)"
@@ -1319,7 +1325,7 @@
                 var www;
                 datasets = _.isArray(datasets) ? datasets : [].slice.call(arguments, 1);
                 o = o || {};
-                www = WWW(o.classNames);
+                www = WWW(o.classNames.o.menuConfig);
                 return this.each(attach);
                 function attach() {
                     var $input, $wrapper, $hint, $menu, defaultHint, defaultMenu, eventBus, input, menu, typeahead, MenuConstructor;

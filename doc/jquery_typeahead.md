@@ -286,3 +286,15 @@ $('.typeahead').typeahead({
   }
 });
 ```
+
+### Menu Config
+
+* `position` - Specify the position of suggestion menu. Be either `top` or `bottom`, the default is `bottom`
+
+```javascript
+$('.typeahead').typeahead({
+  menuConfig: {
+    position: 'top'
+  }
+});
+```
