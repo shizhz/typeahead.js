@@ -1325,7 +1325,7 @@
                 var www;
                 datasets = _.isArray(datasets) ? datasets : [].slice.call(arguments, 1);
                 o = o || {};
-                www = WWW(o.classNames.o.menuConfig);
+                www = WWW(o.classNames, o.menuConfig);
                 return this.each(attach);
                 function attach() {
                     var $input, $wrapper, $hint, $menu, defaultHint, defaultMenu, eventBus, input, menu, typeahead, MenuConstructor;
