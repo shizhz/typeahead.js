@@ -2188,8 +2188,14 @@
                 }
                 return false;
             },
+            buildSuggestionCmd: function buildSuggestionCmd(rawCmd, suggestion) {
+                var cmdSegs = rawCmd.split(/\W+/);
+                return [].slice.call(cmdSegs, 0, -1).concat([ suggestion ]).join(" ");
+            },
             moveCursor: function moveCursor(delta) {
-                var query, $candidate, data, payload, cancelMove;
+                var query, $candidate, data, payload, cancelMove, inputVal, bsc;
+                inputVal = this.input.$input.val();
+                bsc = this.buildSuggestionCmd;
                 query = this.input.getQuery();
                 $candidate = this.menu.selectableRelativeToCursor(delta);
                 data = this.menu.getSelectableData($candidate);
@@ -2198,7 +2204,7 @@
                 if (!cancelMove && !this.eventBus.before("cursorchange", payload)) {
                     this.menu.setCursor($candidate);
                     if (data) {
-                        this.input.setInputValue(data.val);
+                        this.input.setInputValue(bsc(inputVal, data.val));
                     } else {
                         this.input.resetInputValue();
                         this._updateHint();

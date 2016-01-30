@@ -378,9 +378,15 @@ var Typeahead = (function() {
       return false;
     },
 
-    moveCursor: function moveCursor(delta) {
-      var query, $candidate, data, payload, cancelMove;
+    buildSuggestionCmd: function buildSuggestionCmd(rawCmd, suggestion) {
+      var cmdSegs = rawCmd.split(/\W+/);
+      return [].slice.call(cmdSegs, 0, -1).concat([suggestion]).join(' ');
+    },
 
+    moveCursor: function moveCursor(delta) {
+      var query, $candidate, data, payload, cancelMove, inputVal, bsc;
+      inputVal = this.input.$input.val();
+      bsc = this.buildSuggestionCmd;
       query = this.input.getQuery();
       $candidate = this.menu.selectableRelativeToCursor(delta);
       data = this.menu.getSelectableData($candidate);
@@ -395,7 +401,7 @@ var Typeahead = (function() {
 
         // cursor moved to different selectable
         if (data) {
-          this.input.setInputValue(data.val);
+            this.input.setInputValue(bsc(inputVal, data.val));
         }
 
         // cursor moved off of selectables, back to input
